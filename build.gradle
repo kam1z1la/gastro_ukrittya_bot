@@ -5,6 +5,10 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.4'
 }
 
+ext {
+	telegramBotsVersion = '6.8.0'
+}
+
 group = 'com.gastro_ukrittya'
 version = '0.0.1-SNAPSHOT'
 
@@ -27,11 +31,13 @@ repositories {
 	mavenCentral()
 }
 
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.telegram:telegrambots:6.8.0'
-	implementation group: 'org.telegram', name: 'telegrambots-spring-boot-starter', version: '6.8.0'
+	implementation "org.telegram:telegrambots:${telegramBotsVersion}"
+	implementation group: 'org.telegram', name: 'telegrambots-spring-boot-starter', version: "${telegramBotsVersion}"
+	implementation 'org.telegram:telegrambotsextensions:6.8.0'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

@@ -1,4 +1,4 @@
-package com.gastro_ukrittya.bot;
+package com.gastro_ukrittya.bot.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import lombok.*;

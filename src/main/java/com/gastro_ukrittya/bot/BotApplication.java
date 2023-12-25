@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 import org.telegram.telegrambots.starter.TelegramBotStarterConfiguration;
 
 @SpringBootApplication
-//@Import(TelegramBotStarterConfiguration.class)
+@Import(TelegramBotStarterConfiguration.class)
 public class BotApplication {
 
 	public static void main(String[] args) {
