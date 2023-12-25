@@ -1,7 +1,7 @@
 package com.gastro_ukrittya.bot.handler;
 
 public enum Command {
-    CONTACTS {
+    CONTACT {
         @Override
         String getCommand() {
             return "\uD83D\uDCDE  Контакти";
@@ -19,7 +19,7 @@ public enum Command {
             return "\uD83E\uDD42 Забронювати столик";
         }
     },
-    CANCEL_ORDER {
+    CANCEL_RESERVATION {
         @Override
         String getCommand() {
             return "❌ Скасувати оформлення";
