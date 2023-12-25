@@ -33,7 +33,7 @@ public class StartCommand extends BotCommand {
     public void createMainMenu(AbsSender absSender, Chat chat, String text) {
         try {
             absSender.execute(SendMessage.builder()
-                    .chatId(chat.getId().toString())
+                    .chatId(chat.getId())
                     .text(text)
                     .replyMarkup(createReplyKeyboardMarkup())
                     .build());

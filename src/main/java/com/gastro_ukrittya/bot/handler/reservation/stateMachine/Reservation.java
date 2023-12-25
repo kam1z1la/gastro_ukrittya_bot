@@ -1,4 +1,4 @@
-package com.gastro_ukrittya.bot.handler.order.stateMachine;
+package com.gastro_ukrittya.bot.handler.reservation.stateMachine;
 
 import com.gastro_ukrittya.bot.config.User;
 import lombok.Getter;

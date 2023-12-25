@@ -1,8 +1,6 @@
 package com.gastro_ukrittya.bot.handler;
 
 import com.gastro_ukrittya.bot.config.BotConfig;
-import com.gastro_ukrittya.bot.handler.Command;
-import com.gastro_ukrittya.bot.handler.ReservationHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
@@ -13,16 +11,16 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.UserShared;
 
 import static com.gastro_ukrittya.bot.handler.Command.BOOKED;
-import static com.gastro_ukrittya.bot.handler.Command.CANCEL_ORDER;
+import static com.gastro_ukrittya.bot.handler.Command.CANCEL_RESERVATION;
 
 
 @Slf4j
 @Component
-public class TelegramBotCommand extends TelegramLongPollingCommandBot {
+public class TelegramBot extends TelegramLongPollingCommandBot {
     private boolean isReservation;
     private final BotConfig bot;
 
-    public TelegramBotCommand(BotConfig bot) {
+    public TelegramBot(BotConfig bot) {
         super(bot.getToken());
         this.bot = bot;
     }
@@ -32,7 +30,7 @@ public class TelegramBotCommand extends TelegramLongPollingCommandBot {
         return bot.getName();
     }
 
-    //todo made factory
+    //todo made factory and regfactor
     @Override
     public void processNonCommandUpdate(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -62,7 +60,7 @@ public class TelegramBotCommand extends TelegramLongPollingCommandBot {
             isReservation = true;
         } else if (isReservation) {
             //todo refactor!!!!
-            if (message.getText().equals(BOOKED.getCommand()) || message.getText().equals(CANCEL_ORDER.getCommand())) {
+            if (message.getText().equals(BOOKED.getCommand()) || message.getText().equals(CANCEL_RESERVATION.getCommand())) {
                 isReservation = false;
             } else {
                 registeredCommand = getRegisteredCommand("\uD83E\uDD42 Забронювати столик");

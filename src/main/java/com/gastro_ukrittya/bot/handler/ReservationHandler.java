@@ -1,8 +1,8 @@
 package com.gastro_ukrittya.bot.handler;
 
-import com.gastro_ukrittya.bot.handler.order.Sender;
-import com.gastro_ukrittya.bot.handler.order.stateMachine.Reservation;
-import com.gastro_ukrittya.bot.handler.order.stateMachine.ReservationState;
+import com.gastro_ukrittya.bot.handler.reservation.Sender;
+import com.gastro_ukrittya.bot.handler.reservation.stateMachine.Reservation;
+import com.gastro_ukrittya.bot.handler.reservation.stateMachine.ReservationState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,8 +18,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.List;
 
 import static com.gastro_ukrittya.bot.handler.Command.BOOKED;
-import static com.gastro_ukrittya.bot.handler.order.stateMachine.ReservationState.BOOKING;
-import static com.gastro_ukrittya.bot.handler.order.stateMachine.ReservationState.ORDER;
+import static com.gastro_ukrittya.bot.handler.reservation.stateMachine.ReservationState.BOOKING;
+import static com.gastro_ukrittya.bot.handler.reservation.stateMachine.ReservationState.ORDER;
 
 @Slf4j
 @Component

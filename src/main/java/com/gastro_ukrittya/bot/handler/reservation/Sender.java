@@ -1,7 +1,7 @@
-package com.gastro_ukrittya.bot.handler.order;
+package com.gastro_ukrittya.bot.handler.reservation;
 
 import com.gastro_ukrittya.bot.config.User;
-import com.gastro_ukrittya.bot.handler.order.stateMachine.ReservationState;
+import com.gastro_ukrittya.bot.handler.reservation.stateMachine.ReservationState;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;

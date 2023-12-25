@@ -1,4 +1,4 @@
-package com.gastro_ukrittya.bot.handler.order.stateMachine;
+package com.gastro_ukrittya.bot.handler.reservation.stateMachine;
 
 public enum ReservationState {
     NAME,
