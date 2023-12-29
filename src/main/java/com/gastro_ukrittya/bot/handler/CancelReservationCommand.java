@@ -1,7 +1,7 @@
 package com.gastro_ukrittya.bot.handler;
 
 import com.gastro_ukrittya.bot.command.StartCommand;
-import com.gastro_ukrittya.bot.handler.reservation.stateMachine.Reservation;
+import com.gastro_ukrittya.bot.handler.reservation.stateMachine.ReservationStateMachine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import static com.gastro_ukrittya.bot.handler.Command.CANCEL_RESERVATION;
 @RequiredArgsConstructor
 public class CancelReservationCommand implements IBotCommand {
     private final StartCommand startCommand;
-    private final Reservation reservation;
+    private final ReservationStateMachine reservationStateMachine;
 
     @Override
     public String getCommandIdentifier() {
@@ -30,7 +30,7 @@ public class CancelReservationCommand implements IBotCommand {
 
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] arguments) {
-        reservation.getStates().remove(reservation.findUserByChatId(message.getChatId()));
+        reservationStateMachine.deleteUserByChatId(message.getChatId());
         startCommand.createMainMenu(absSender, message.getChat(), "Головне меню");
     }
 }

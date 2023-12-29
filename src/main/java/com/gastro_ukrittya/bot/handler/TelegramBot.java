@@ -1,6 +1,8 @@
 package com.gastro_ukrittya.bot.handler;
 
 import com.gastro_ukrittya.bot.config.BotConfig;
+import com.gastro_ukrittya.bot.config.Order;
+import com.gastro_ukrittya.bot.handler.reservation.stateMachine.ReservationStateMachine;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
@@ -17,12 +19,13 @@ import static com.gastro_ukrittya.bot.handler.Command.CANCEL_RESERVATION;
 @Slf4j
 @Component
 public class TelegramBot extends TelegramLongPollingCommandBot {
-    private boolean isReservation;
+    private final ReservationStateMachine reservation;
     private final BotConfig bot;
 
-    public TelegramBot(BotConfig bot) {
+    public TelegramBot(BotConfig bot, ReservationStateMachine reservation) {
         super(bot.getToken());
         this.bot = bot;
+        this.reservation = reservation;
     }
 
     @Override
@@ -36,7 +39,9 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             Message message = update.getMessage();
             IBotCommand registeredCommand = getCommand(message);
-            registeredCommand.processMessage(this, message, null);
+            if (registeredCommand != null) {
+                registeredCommand.processMessage(this, message, null);
+            }
         }
 
         if (update.getMessage().hasContact()) {
@@ -53,20 +58,16 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
         }
     }
 
+    //todo подумать над многопоточностью
     public IBotCommand getCommand(Message message) {
-        IBotCommand registeredCommand = getRegisteredCommand(message.getText());
-
-        if (registeredCommand instanceof ReservationHandler) {
-            isReservation = true;
-        } else if (isReservation) {
-            //todo refactor!!!!
+        if (reservation.isUserMakesReservation(message.getChatId())) {
             if (message.getText().equals(BOOKED.getCommand()) || message.getText().equals(CANCEL_RESERVATION.getCommand())) {
-                isReservation = false;
+                Order order = reservation.findUserByChatId(message.getChatId());
+                order.setReservation(false);
             } else {
-                registeredCommand = getRegisteredCommand("\uD83E\uDD42 Забронювати столик");
+                return getRegisteredCommand("\uD83E\uDD42 Забронювати столик");
             }
         }
-
-        return registeredCommand;
+        return getRegisteredCommand(message.getText());
     }
 }

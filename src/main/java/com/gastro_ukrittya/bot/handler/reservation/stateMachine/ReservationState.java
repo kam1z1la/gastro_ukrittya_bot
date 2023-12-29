@@ -7,7 +7,5 @@ public enum ReservationState {
     PHONE_NUMBER,
     NUMBER_OF_PEOPLE,
     BOOKING,
-    ORDER,
-    CANCEL,
-    EDIT
+    ORDER
 }

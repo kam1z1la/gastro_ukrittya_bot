@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
-public class User {
+public class Order {
     private Long chatId;
     private String date;
     private String time;

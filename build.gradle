@@ -35,9 +35,15 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.flywaydb:flyway-core'
+	runtimeOnly 'org.postgresql:postgresql'
+	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+
 	implementation "org.telegram:telegrambots:${telegramBotsVersion}"
 	implementation group: 'org.telegram', name: 'telegrambots-spring-boot-starter', version: "${telegramBotsVersion}"
-	implementation 'org.telegram:telegrambotsextensions:6.8.0'
+	implementation "org.telegram:telegrambotsextensions:${telegramBotsVersion}"
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
