@@ -31,4 +31,7 @@ public class ContactConfig {
 
     @Value("${contact.location.longitude}")
     private Double longitude;
+
+    @Value("${contact.location.googlePlaceIde}")
+    private String googlePlaceId;
 }

@@ -1,5 +1,6 @@
 package com.gastro_ukrittya.bot.command;
 
+import com.gastro_ukrittya.bot.keyboard.ReplyMarkupFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
@@ -8,21 +9,20 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.menubutton.MenuButtonWebApp;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.List;
+import static com.gastro_ukrittya.bot.keyboard.Event.MAIN;
 
 @Slf4j
 @Component
 public class StartCommand extends BotCommand {
+    private final ReplyMarkupFactory keyboard;
 
-    public StartCommand() {
+    public StartCommand(ReplyMarkupFactory keyboard) {
         super("start", "start using bot\n");
+        this.keyboard = keyboard;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class StartCommand extends BotCommand {
             absSender.execute(SendMessage.builder()
                     .chatId(chat.getId())
                     .text(text)
-                    .replyMarkup(createReplyKeyboardMarkup())
+                    .replyMarkup(keyboard.getKeyboard(MAIN))
                     .build());
             absSender.execute(createMenuButton(chat.getId().toString()));
         } catch (TelegramApiException e) {
@@ -43,7 +43,7 @@ public class StartCommand extends BotCommand {
         }
     }
 
-    public SetChatMenuButton createMenuButton(String chatId) {
+    private SetChatMenuButton createMenuButton(String chatId) {
         return SetChatMenuButton.builder()
                 .chatId(chatId)
                 .menuButton(MenuButtonWebApp.builder()
@@ -52,23 +52,6 @@ public class StartCommand extends BotCommand {
                                 .url("https://gastroukryttia.ps.me/")
                                 .build())
                         .build())
-                .build();
-    }
-
-    public ReplyKeyboardMarkup createReplyKeyboardMarkup() {
-        return ReplyKeyboardMarkup.builder()
-                .selective(true)
-                .resizeKeyboard(true)
-                .oneTimeKeyboard(false)
-                .keyboardRow(new KeyboardRow(
-                        List.of(
-                                new KeyboardButton("\uD83D\uDCDE  Контакти"),
-                                new KeyboardButton("\uD83C\uDFAD  Стендап")
-                        )
-                ))
-                .keyboardRow(new KeyboardRow(
-                        List.of(new KeyboardButton("\uD83E\uDD42 Забронювати столик"))
-                ))
                 .build();
     }
 }
