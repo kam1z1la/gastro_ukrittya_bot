@@ -1,0 +1,1 @@
+alter table reservation add column  message_id bigint;

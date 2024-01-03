@@ -1,7 +1,6 @@
 package com.gastro_ukrittya.bot.handler;
 
-import com.gastro_ukrittya.bot.command.StartCommand;
-import com.gastro_ukrittya.bot.handler.state.Context;
+import com.gastro_ukrittya.bot.handler.state.edit_reservation.EditContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -9,18 +8,18 @@ import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
-import static com.gastro_ukrittya.bot.config.Command.CANCEL_RESERVATION;
+import static com.gastro_ukrittya.bot.config.Command.EDIT_RESERVE;
+
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CancelReservationCommand implements IBotCommand {
-    private final StartCommand startCommand;
-    private final Context context;
+public class EditReservation implements IBotCommand {
+    private final EditContext context;
 
     @Override
     public String getCommandIdentifier() {
-        return CANCEL_RESERVATION.getCommand();
+        return EDIT_RESERVE.getCommand();
     }
 
     @Override
@@ -30,7 +29,6 @@ public class CancelReservationCommand implements IBotCommand {
 
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] arguments) {
-        context.deleteUserByChatId(message.getChatId());
-        startCommand.createStartInterface(absSender, message.getChat(), "Головне меню");
+        context.doAction(absSender, message);
     }
 }
