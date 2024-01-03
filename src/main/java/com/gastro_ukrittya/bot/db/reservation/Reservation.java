@@ -1,12 +1,11 @@
 package com.gastro_ukrittya.bot.db.reservation;
 
-import com.gastro_ukrittya.bot.db.user.Client;
+import com.gastro_ukrittya.bot.db.client.Client;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -14,7 +13,7 @@ import java.util.List;
 @Table(name = "reservation")
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"reservations"})
+@ToString
 @Builder
 public class Reservation {
     @Id
@@ -28,7 +27,11 @@ public class Reservation {
     @Column(name = "number_of_people")
     private String numberOfPeople;
 
-    @ManyToMany(mappedBy = "reservations", cascade = CascadeType.REMOVE)
-    private List<Client> reservations;
+    @Column(name = "message_id")
+    private Integer messageId;
+
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "client_id")
+    private Client client;
 }
 

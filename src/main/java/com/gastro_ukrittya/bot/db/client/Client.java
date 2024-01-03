@@ -1,4 +1,4 @@
-package com.gastro_ukrittya.bot.db.user;
+package com.gastro_ukrittya.bot.db.client;
 
 import com.gastro_ukrittya.bot.db.reservation.Reservation;
 import jakarta.persistence.*;
@@ -27,11 +27,6 @@ public class Client {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @JoinTable(
-            name = "client_reservation",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "reservation_id")
-    )
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Reservation> reservations;
 }

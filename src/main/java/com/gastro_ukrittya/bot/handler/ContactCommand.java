@@ -1,7 +1,7 @@
 package com.gastro_ukrittya.bot.handler;
 
 import com.gastro_ukrittya.bot.config.ContactConfig;
-import com.gastro_ukrittya.bot.keyboard.ReplyMarkupFactory;
+import com.gastro_ukrittya.bot.keyboard.KeyboardProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,14 +15,14 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.StringJoiner;
 
-import static com.gastro_ukrittya.bot.handler.Command.CONTACT;
-import static com.gastro_ukrittya.bot.keyboard.Event.MAIN;
+import static com.gastro_ukrittya.bot.config.Command.CONTACT;
+import static com.gastro_ukrittya.bot.keyboard.Keyboard.MAIN;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ContactCommand implements IBotCommand, Notification {
-    private final ReplyMarkupFactory keyboard;
+    private final KeyboardProvider keyboard;
     private final ContactConfig contact;
 
     @Override
@@ -37,8 +37,13 @@ public class ContactCommand implements IBotCommand, Notification {
 
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] arguments) {
+        Message location = createAndSendLocation(absSender, message);
+        createAndSendContactMessage(absSender, location);
+    }
+
+    private Message createAndSendLocation(AbsSender absSender, Message message) {
         try {
-            Message locationMessage = absSender.execute(SendVenue.builder()
+            return absSender.execute(SendVenue.builder()
                     .chatId(message.getChatId())
                     .latitude(contact.getLatitude())
                     .longitude(contact.getLongitude())
@@ -46,16 +51,24 @@ public class ContactCommand implements IBotCommand, Notification {
                     .address(String.format("\uD83D\uDCCD %s", contact.getAddress()))
                     .googlePlaceId(contact.getGooglePlaceId())
                     .build());
+        } catch (TelegramApiException e) {
+            log.error("Problem in sending the item");
+            throw new RuntimeException(e);
+        }
+    }
 
+    private void createAndSendContactMessage(AbsSender absSender, Message message) {
+        try {
             absSender.execute(SendMessage.builder()
                     .chatId(message.getChatId())
                     .text(getNotification())
                     .parseMode(ParseMode.MARKDOWN)
                     .disableWebPagePreview(true)
-                    .replyToMessageId(locationMessage.getMessageId())
-                    .replyMarkup(keyboard.getKeyboard(MAIN))
+                    .replyToMessageId(message.getMessageId())
+                    .replyMarkup(keyboard.getKeyboard(MAIN).createReplyKeyboardMarkup())
                     .build());
         } catch (TelegramApiException e) {
+            log.error("Problem in sending the item");
             throw new RuntimeException(e);
         }
     }

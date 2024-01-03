@@ -1,6 +1,6 @@
 package com.gastro_ukrittya.bot.command;
 
-import com.gastro_ukrittya.bot.keyboard.ReplyMarkupFactory;
+import com.gastro_ukrittya.bot.keyboard.KeyboardProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
@@ -13,29 +13,29 @@ import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import static com.gastro_ukrittya.bot.keyboard.Event.MAIN;
+import static com.gastro_ukrittya.bot.keyboard.Keyboard.MAIN;
 
 @Slf4j
 @Component
 public class StartCommand extends BotCommand {
-    private final ReplyMarkupFactory keyboard;
+    private final KeyboardProvider keyboard;
 
-    public StartCommand(ReplyMarkupFactory keyboard) {
+    public StartCommand(KeyboardProvider keyboard) {
         super("start", "start using bot\n");
         this.keyboard = keyboard;
     }
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
-        createMainMenu(absSender, chat, "\uD83D\uDC4B");
+        createStartInterface(absSender, chat, "\uD83D\uDC4B");
     }
 
-    public void createMainMenu(AbsSender absSender, Chat chat, String text) {
+    public void createStartInterface(AbsSender absSender, Chat chat, String text) {
         try {
             absSender.execute(SendMessage.builder()
                     .chatId(chat.getId())
                     .text(text)
-                    .replyMarkup(keyboard.getKeyboard(MAIN))
+                    .replyMarkup(keyboard.getKeyboard(MAIN).createReplyKeyboardMarkup())
                     .build());
             absSender.execute(createMenuButton(chat.getId().toString()));
         } catch (TelegramApiException e) {

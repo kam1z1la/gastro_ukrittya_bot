@@ -1,39 +1,52 @@
 package com.gastro_ukrittya.bot.db.reservation;
 
-import com.gastro_ukrittya.bot.config.Order;
+import com.gastro_ukrittya.bot.config.ReservationDto;
 import com.gastro_ukrittya.bot.db.Mapper;
+import com.gastro_ukrittya.bot.handler.ValidationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ReservationService implements Mapper<Order, Reservation> {
+public class ReservationService implements Mapper<ReservationDto, Reservation> {
     private final ReservationRepository reservationRepository;
+    private final ValidationService validation;
 
-    public void addReservation(Order order) {
-        reservationRepository.save(toEntity(order));
+    public Long addReservation(ReservationDto reservationDto) {
+        Long id = reservationRepository.save(toEntity(reservationDto)).getId();
         log.info("Reservation success add");
+        return id;
+    }
+
+    @Modifying
+    public void updateReservation(Reservation reservation) {
+        reservationRepository.save(reservation);
+    }
+
+    public Reservation findReservationById(long id) {
+        return reservationRepository.findById(id).orElseThrow();
+    }
+
+    public Reservation findReservationByMessageId(long id) {
+        return reservationRepository.findByMessageId(id);
     }
 
     @Override
-    public Reservation toEntity(Order dto) {
+    public Reservation toEntity(ReservationDto dto) {
         return Reservation.builder()
-                .date(LocalDate.parse(
-                        getDate(dto.getDate()),
-                        DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+                .messageId(dto.getMessageId())
+                .date(LocalDate.parse(validation.getDate(dto.getDate())))
                 .time(LocalTime.parse(dto.getTime()))
                 .numberOfPeople(dto.getNumberOfPeople())
+                .client(dto.getClient())
                 .build();
     }
 
-    private String getDate(String date) {
-        return date.matches("^\\d{2}.\\d{2}$")? date + "." + Year.now().getValue() : date;
-    }
+
 }

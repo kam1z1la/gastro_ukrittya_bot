@@ -1,4 +1,4 @@
-package com.gastro_ukrittya.bot.keyboard;
+package com.gastro_ukrittya.bot.keyboard.products.reply;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -6,9 +6,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 
 import java.util.List;
 
-public class ContactKeyboard implements ReplyMarkup{
+public class ContactReplyKeyboard implements ReplyKeyboard {
     @Override
-    public ReplyKeyboardMarkup createKeyboard() {
+    public ReplyKeyboardMarkup createReplyKeyboard() {
         return ReplyKeyboardMarkup.builder()
                 .selective(true)
                 .resizeKeyboard(true)
@@ -25,8 +25,7 @@ public class ContactKeyboard implements ReplyMarkup{
                                 KeyboardButton.builder()
                                         .text("\uD83D\uDCF1 Поширити свій номер телефону")
                                         .requestContact(true)
-                                        .build()
-                        )
+                                        .build())
                 ),
                 new KeyboardRow(
                         List.of(new KeyboardButton("❌ Скасувати оформлення"))
