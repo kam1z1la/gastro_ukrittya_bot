@@ -17,8 +17,13 @@ public class MainInlineMenu implements InlineKeyboard {
     public List<List<InlineKeyboardButton>> createButtons() {
         return List.of(
                 List.of(InlineKeyboardButton.builder()
-                        .text("Редагувати замовлення")
+                        .text("\uD83D\uDCDD Редагувати замовлення")
                         .callbackData("edit")
+                        .build()
+                ),
+                List.of(InlineKeyboardButton.builder()
+                        .text("\uD83D\uDDD1 Видалити замовлення")
+                        .callbackData("delete-confirm")
                         .build()
                 ));
     }

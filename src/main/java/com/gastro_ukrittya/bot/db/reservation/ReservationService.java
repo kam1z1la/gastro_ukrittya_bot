@@ -1,15 +1,18 @@
 package com.gastro_ukrittya.bot.db.reservation;
 
-import com.gastro_ukrittya.bot.config.ReservationDto;
+import com.gastro_ukrittya.bot.dto.ReservationDto;
 import com.gastro_ukrittya.bot.db.Mapper;
-import com.gastro_ukrittya.bot.handler.ValidationService;
+import com.gastro_ukrittya.bot.handler.reservation.ValidationService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Service
@@ -18,35 +21,37 @@ public class ReservationService implements Mapper<ReservationDto, Reservation> {
     private final ReservationRepository reservationRepository;
     private final ValidationService validation;
 
-    public Long addReservation(ReservationDto reservationDto) {
-        Long id = reservationRepository.save(toEntity(reservationDto)).getId();
+    @Transactional
+    public Reservation addReservation(ReservationDto reservationDto) {
+        Reservation reservation = toEntity(reservationDto);
         log.info("Reservation success add");
-        return id;
+        return reservationRepository.save(reservation);
     }
 
     @Modifying
-    public void updateReservation(Reservation reservation) {
-        reservationRepository.save(reservation);
+    @Transactional
+    public void deleteReservation(long id) {
+        reservationRepository.deleteById(id);
     }
 
-    public Reservation findReservationById(long id) {
-        return reservationRepository.findById(id).orElseThrow();
+    public void updateReservation(@NonNull ReservationDto dto) {
+        Reservation reservation = toEntity(dto);
+        reservationRepository.updateReservation(reservation);
     }
 
-    public Reservation findReservationByMessageId(long id) {
-        return reservationRepository.findByMessageId(id);
+    public Reservation findReservationByMessageId(Integer id) {
+         return reservationRepository.findByMessageId(id);
     }
 
     @Override
     public Reservation toEntity(ReservationDto dto) {
         return Reservation.builder()
+                .id(dto.getReservationId())
                 .messageId(dto.getMessageId())
-                .date(LocalDate.parse(validation.getDate(dto.getDate())))
+                .date(LocalDate.parse(validation.getDate(dto.getDate()), DateTimeFormatter.ofPattern("dd.MM.yyyy")))
                 .time(LocalTime.parse(dto.getTime()))
                 .numberOfPeople(dto.getNumberOfPeople())
                 .client(dto.getClient())
                 .build();
     }
-
-
 }

@@ -22,7 +22,7 @@ public class SaveAndCancelInlineKeyboard implements InlineKeyboard {
                         .build()),
                 List.of(InlineKeyboardButton.builder()
                         .text("\uD83D\uDEAB Скасувати зміни")
-                        .callbackData("main")
+                        .callbackData("cancel")
                         .build()));
     }
 }

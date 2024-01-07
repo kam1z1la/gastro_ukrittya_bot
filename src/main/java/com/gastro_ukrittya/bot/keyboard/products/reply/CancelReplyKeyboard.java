@@ -19,8 +19,13 @@ public class CancelReplyKeyboard implements ReplyKeyboard {
 
     @Override
     public List<KeyboardRow> createButtons() {
-        return List.of(new KeyboardRow(
-                List.of(new KeyboardButton("❌ Скасувати оформлення"))
-        ));
+        return List.of(
+                new KeyboardRow(
+                        List.of(new KeyboardButton("⤴ Повернутися на попередній етап"))
+                ),
+                new KeyboardRow(
+                        List.of(new KeyboardButton("❌ Скасувати оформлення"))
+                ));
+
     }
 }

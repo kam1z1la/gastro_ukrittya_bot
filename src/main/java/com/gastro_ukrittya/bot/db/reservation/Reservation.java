@@ -30,7 +30,7 @@ public class Reservation {
     @Column(name = "message_id")
     private Integer messageId;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
 }
