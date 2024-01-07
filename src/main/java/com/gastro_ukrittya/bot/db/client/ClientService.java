@@ -1,25 +1,30 @@
 package com.gastro_ukrittya.bot.db.client;
 
-import com.gastro_ukrittya.bot.config.ReservationDto;
+import com.gastro_ukrittya.bot.dto.ReservationDto;
 import com.gastro_ukrittya.bot.db.Mapper;
+import com.gastro_ukrittya.bot.handler.reservation.ValidationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ClientService implements Mapper<ReservationDto, Client> {
     private final ClientRepository clientRepository;
+    private final ValidationService validation;
 
-    public Long addClient(ReservationDto reservationDto) {
-        Long id = clientRepository.save(toEntity(reservationDto)).getId();
+    @Transactional
+    public Client addClient(ReservationDto reservationDto) {
+        Client client = toEntity(reservationDto);
         log.info("Client success add");
-        return id;
+        return clientRepository.save(client);
     }
 
-    public Client findClientById(Long id) {
-        return clientRepository.findById(id).orElseThrow();
+    public void updateClientById(ReservationDto dto) {
+        Client client = toEntity(dto);
+        clientRepository.updateClientById(client);
     }
 
     @Override
@@ -27,7 +32,7 @@ public class ClientService implements Mapper<ReservationDto, Client> {
         return Client.builder()
                 .id(dto.getChatId())
                 .firstName(dto.getName())
-                .phoneNumber(dto.getPhoneNumber())
+                .phoneNumber(validation.getPhoneNumber(dto.getPhoneNumber()))
                 .build();
     }
 }

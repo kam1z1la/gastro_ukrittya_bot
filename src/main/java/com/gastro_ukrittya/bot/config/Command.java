@@ -19,6 +19,12 @@ public enum Command {
             return "\uD83E\uDD42 Забронювати столик";
         }
     },
+    COME_BACK {
+        @Override
+        public String getCommand() {
+            return "⤴ Повернутися на попередній етап";
+        }
+    },
     CANCEL_RESERVATION {
         @Override
         public String getCommand() {

@@ -22,7 +22,7 @@ public class ReservationEditorInlineKeyboard implements InlineKeyboard {
                 createButton("Змінити час","time"),
                 createButton("Змінити кількість людей","numberOfPeople"),
                 createButton("Змінити номер телефону","phoneNumber"),
-                createButton("« Повернутися назад","back"));
+                createButton("⬅","back"));
     }
 
     private List<InlineKeyboardButton> createButton(String text, String callbackData) {
